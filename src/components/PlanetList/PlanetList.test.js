@@ -1,7 +1,7 @@
 import React from 'react';
 import {render, screen, fireEvent, act} from '@testing-library/react';
 
-import PlanetList from './index';
+import PlanetListContainer from './index';
 import {pageOne, pageTwo} from '../../fixtures/planets.fixture';
 
 describe('PlanetList', () => {
@@ -9,9 +9,10 @@ describe('PlanetList', () => {
     const mockService = {
       getPlanets: jest.fn().mockResolvedValue(pageOne)
     }
-    render(<PlanetList apiService={mockService}/>)
+    render(<PlanetListContainer apiService={mockService}/>)
     await screen.findByText('Tatooine')
     expect(screen.getByText('Alderaan'))
+    expect(mockService.getPlanets).toHaveBeenCalled()
   })
 
   it('gets the next page', async () => {
@@ -19,7 +20,7 @@ describe('PlanetList', () => {
       getPlanets: jest.fn().mockResolvedValue(pageOne)
     }
 
-    render(<PlanetList apiService={mockService}/>)
+    render(<PlanetListContainer apiService={mockService}/>)
     await screen.findByText('Tatooine')
 
     mockService.getPlanets.mockResolvedValueOnce(pageTwo)
@@ -36,7 +37,7 @@ describe('PlanetList', () => {
       getPlanets: jest.fn().mockResolvedValue(pageOne)
     }
 
-    render(<PlanetList apiService={mockService}/>)
+    render(<PlanetListContainer apiService={mockService}/>)
     await screen.findByText('Tatooine')
 
     fireEvent.change(screen.getByPlaceholderText('Search by name'), {

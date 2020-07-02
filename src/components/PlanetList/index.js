@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
 
+import PlanetList from './PlanetList';
 import FetchClient from '../../clients/Fetch';
 import PlanetService from '../../services/Planet';
 
 const service = new PlanetService(new FetchClient())
 
-function PlanetList({apiService = service}) {
+function PlanetListContainer({apiService = service}) {
   const [planets, setPlanets] = useState([])
   const searchRef = useRef()
   const currentPage = useRef(1)
@@ -40,18 +41,14 @@ function PlanetList({apiService = service}) {
   }
 
   return (
-    <div>
-      <input type="search" ref={searchRef} placeholder="Search by name"></input>
-      <button onClick={search}>Search</button>
-      <ul>
-        {planets.map((planet) => {
-          return <li key={planet.name}>{planet.name}</li>
-        })}
-      </ul>
-      <button onClick={previous}>Previous Page</button>
-      <button onClick={next}>Next Page</button>
-    </div>
+    <PlanetList
+      planets={planets}
+      next={next}
+      previous={previous}
+      searchRef={searchRef}
+      search={search}
+    />
   )
 }
 
-export default PlanetList
+export default PlanetListContainer
